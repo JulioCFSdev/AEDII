@@ -1,5 +1,13 @@
 #include <iostream>
 
+
+int* arraygenerator(int len_array)
+{
+	int* array = new int[len_array];
+	return array;
+}
+
+
 void quicksort(int values[], int began, int end)
 {
 	int i, j, pivo, aux;
