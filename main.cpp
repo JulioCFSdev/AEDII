@@ -1,9 +1,17 @@
 #include <iostream>
-
+#include <string>
+#include <vector>
 
 int* arraygenerator(int len_array)
 {
 	int* array = new int[len_array];
+	return array;
+}
+
+int* arrayrandomization(int* array)
+{
+	int len = sizeof(array)/sizeof(int);
+	std::cout << sizeof(array)/sizeof(int) << ' ';
 	return array;
 }
 
@@ -52,5 +60,9 @@ int main(int argc, char *argv[])
 	{
 		std::cout << array[i] << ' ';
 	}
+	
+	int arrayaiii[] = {5, 8, 1, 2, 7, 3, 6, 9, 4, 10};
+	
+	int *arrayy = arrayrandomization(arrayaiii);
 	return 0;
 }
