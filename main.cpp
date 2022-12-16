@@ -1,68 +1,184 @@
-#include <iostream>
-#include <string>
-#include <vector>
+#include<iostream>
+#include<vector>
+#include <bits/stdc++.h>
 
-int* arraygenerator(int len_array)
+
+using namespace std;
+
+// Gerador de Vectores aletórios
+vector<long int> generationvector(int geracao)
 {
-	int* array = new int[len_array];
-	return array;
+	srand(geracao);
+	std::vector<long int> v(100);
+	generate(v.begin(), v.end(), rand);
+	return v;
 }
 
-int* arrayrandomization(int* array)
+// Ordenador de Vetores em ordem crescente
+void ascendingsort(vector<long int> &vec)
 {
-	int len = sizeof(array)/sizeof(int);
-	std::cout << sizeof(array)/sizeof(int) << ' ';
-	return array;
+	sort(vec.begin(), vec.end());
 }
 
-
-void quicksort(int values[], int began, int end)
+// Ordenador de Vetores em ordem decrescente
+void descendingsort(vector<long int> &vec)
 {
-	int i, j, pivo, aux;
-	i = began;
-	j = end-1;
-	pivo = values[(began + end) / 2];
-	while(i <= j)
+	sort(vec.begin(), vec.end(), greater<int>());
+}
+
+// Conversor de vetores para valores crescentes de 0 a seu tamanho
+void ascendinggeneration(vector<long int> &vec)
+{
+	for(long int value = 0; value < vec.size(); value++)
 	{
-		while(values[i] < pivo && i < end)
+		vec[value] = value;
+	}
+}
+
+// Conversor de vetores para valores decrescentes seu tamanho até 0
+void descendinggeneration(vector<long int> &vec)
+{
+	for(long int value = vec.size(); value >= 0; value--)
+	{
+		vec[value] = value;
+	}
+}
+
+// Conversor de vetores para metade crescete e metade decrescentes de valores de 0 a tamanho/2
+void ascendingdescendingsort(vector<long int> &vec)
+{
+	for(long int value = 0; value < vec.size(); value++)
+	{
+		if(value <= (vec.size()/2))
 		{
-			i++;
+			vec[value] = value;
 		}
-		while(values[j] > pivo && j > began)
+		else
 		{
-			j--;
-		}
-		if(i <= j)
-		{
-			aux = values[i];
-			values[i] = values[j];
-			values[j] = aux;
-			i++;
-			j--;
+			vec[value] = vec.size() - value - 1;
 		}
 	}
-	if(j > began)
-		quicksort(values, began, j+1);
-	if(i < end)
-		quicksort(values, i, end);
 }
 
-int main(int argc, char *argv[])
+// Conversor de vetores de metade decrescentes e metade crescete e de valores tamanho/2 a 0
+void descendingascendingsort(vector<long int> &vec)
 {
-	int array[10] = {5, 8, 1, 2, 7, 3, 6, 9, 4, 10};
-	for(int i = 0; i < 10; i++)
+	for(long int value = vec.size(); value >= 0; value--)
 	{
-		std::cout << array[i] << ' ';
+		if(value >= (vec.size()/2))
+		{
+			vec[value] = value;
+		}
+		else
+		{
+			vec[value] = vec.size() - value + 1;
+		}
 	}
-	std::cout << std::endl;
-	quicksort(array, 0, 10);
-	for(int i = 0; i < 10; i++)
-	{
-		std::cout << array[i] << ' ';
+}
+
+
+
+// retorna o proximo pivo
+long int Partition(vector<long int> &v,long int start,long int end){
+	
+	long int pivot = end;
+	long int j = start;
+	for(long int i=start;i<end;++i){
+		if(v[i]<v[pivot]){
+			swap(v[i],v[j]);
+			++j;
+		}
+	}
+	swap(v[j],v[pivot]);
+	return j;
+	
+}
+
+// recursão do processo de partição, ordena por partes
+void Quicksort(vector<long int> &v,long int start,long int end ){
+
+	if(start<end){
+		long int p = Partition(v,start,end);
+		Quicksort(v,start,p-1);
+		Quicksort(v,p+1,end);
 	}
 	
-	int arrayaiii[] = {5, 8, 1, 2, 7, 3, 6, 9, 4, 10};
+}
+
+// Imprime o vetor
+void PrintVector(vector<long int> v){
+	for(long int i=0;i<v.size();++i)
+		cout<<v[i]<<" ";
+	cout<<"\n\n";
+}
+
+int main() {
 	
-	int *arrayy = arrayrandomization(arrayaiii);
-	return 0;
+	// Constantes Universais 
+	long int vector_size = 100000;
+	int start = 0;
+	
+	// Lista de vetores requisitadoss
+	std::vector<long int> randomVector = generationvector(1);
+	std::vector<long int> ascendVector(vector_size);
+	std::vector<long int> descendVector(vector_size);
+	std::vector<long int> ascendDescendVector(vector_size);
+	std::vector<long int> descendAscendVector(vector_size);
+	
+	// Conversão dos vetores ordenados
+	ascendinggeneration(ascendVector);
+	descendinggeneration(descendVector);
+	ascendingdescendingsort(ascendDescendVector);
+	descendingascendingsort(descendAscendVector);
+	
+	// Saidas do Vetor Aleatório
+	cout<<"Vetor aleatorio antes da ordenação: "<<endl;
+	//PrintVector(randomVector);
+	
+	
+	Quicksort(randomVector,start,randomVector.size()-1);
+	
+	//cout<<"Vetor aleatorio apos a ordenacao "<<endl;
+	//PrintVector(randomVector);
+	cout<<"Ordenacao do Vetor aleatorio Concluida"<<endl;
+	
+	
+	// Saidas do Vetor Crescente
+	cout<<"Vetor crescente antes da ordenacao: "<<endl;
+	//PrintVector(ascendVector);
+	
+	Quicksort(ascendVector,start,ascendVector.size()-1);
+	
+	//cout<<"Vetor crescente apos a ordenacao "<<endl;
+	//PrintVector(ascendVector);
+	cout<<"Ordenacao do Vetor crescente Concluida"<<endl;
+	
+	// Saidas do Vetor Decrescente
+	cout<<"Vetor decrescente antes da ordenacao: "<<endl;
+	//PrintVector(descendVector);
+	
+	Quicksort(descendVector,start,descendVector.size()-1);
+	
+	//cout<<"Vetor decrescente apos a ordenacao "<<endl;
+	//PrintVector(descendVector);
+	
+	// Saidas do Vetor metade crescente metade de decrescente
+	cout<<"Vetor metade crescente metade de decrescente antes da ordenacao: "<<endl;
+	//PrintVector(ascendDescendVector);
+	
+	Quicksort(ascendDescendVector,start,ascendDescendVector.size()-1);
+	
+	//cout<<"Vetor metade crescente metade de decrescente apos a ordenacao "<<endl;
+	//PrintVector(ascendDescendVector);
+	cout<<"Ordenacao do Vetor metade crescente metade de decrescente Concluida"<<endl;
+	
+	// Saidas do Vetor metade decrescente metade de crescente
+	cout<<"Vetor metade decrescente metade de crescente antes da ordenacao: "<<endl;
+	//PrintVector(descendAscendVector);
+	
+	Quicksort(descendAscendVector,start,descendAscendVector.size()-1);
+	
+	//cout<<"Vetor metade decrescente metade de crescente apos a ordenacao "<<endl;
+	//PrintVector(descendAscendVector);
+	cout<<"Ordenacao do Vetor metade decrescente metade de crescente Concluida"<<endl;
 }
