@@ -24,20 +24,7 @@ void ascendingsort(vector<long int> &vec)
 // Ordenador de Vetores em ordem decrescente
 void descendingsort(vector<long int> &vec)
 {
-	sort(vec.begin(), vec.end(), greater<long int>());
-	
-}
-
-vector<long int> descendingsorteeee(vector<long int> &vec)
-{
-	int max = vec.size();
-	std::vector<long int> vet(100000);
-	
-	for(int i = 0; i < max; i++)
-        vet[i] = vec[(max - 1) - i];
-        
-    return vet;
-	
+	sort(vec.begin(), vec.end(), greater<int>());
 }
 
 // Conversor de vetores para metade crescente e metade decrescentes de valores de 0 a tamanho/2
@@ -74,65 +61,60 @@ void descendingascendingsort(vector<long int> &vec)
 
 
 
-// retorna o proximo pivo
-long int partition(vector<long int> & a, int start, int end) {
-  unsigned int pivot = a[start];
-  unsigned int from_left = start+1;
-  unsigned int from_right = end;
-  unsigned int tmp;
-  
-  //cout << "Vector entering partition:";
-  //print (a,start,end);
-  //cout << endl;
-  
-  while (from_left != from_right) {
-    if (a[from_left]  <= pivot) from_left++;
-    else {
-      while (( from_left != from_right)  && (pivot < a[from_right])) from_right--;
-      //cout << "swaping " << a[from_left] << " with "<< a[from_right] << endl;
-      tmp =  a[from_right];
-      a[from_right] = a[from_left];
-      a[from_left] = tmp;
+long int particionar(vector<long int> &vet, long int inicio, long int fim) {
+    long int esq, dir, pivo, aux;
+
+    esq = inicio;
+    dir = fim;
+    pivo = vet[inicio]; // Definindo o pivô como o primeiro número do vetor
+
+    while (esq < dir) {
+
+        // Avançando para esquerda até encontrar um número maior que o pivô
+        while (vet[esq] <= pivo)
+            esq++;
+
+        // Recuando para direita até encontrar um número menor ou igual ao pivô
+        while (vet[dir] > pivo)
+            dir--;
+
+        // Trocando os elementos de posição
+        if (esq < dir) {
+            aux = vet[esq];
+            vet[esq] = vet[dir];
+            vet[dir] = aux;
+        }
     }
-  }
-  
-  if (a[from_left]>pivot) from_left--;
-  a[start] = a[from_left];
-  a[from_left] = pivot;
-  
-  //cout << "Vector after partition:   ";
-  //print (a,start,end);
-  //cout << endl;
 
-  return (from_left);
+    vet[inicio] = vet[dir]; // Trocando os elementos de posição
+    vet[dir] = pivo; // Definindo a nova posição do pivô
+	
+    return dir;
 }
 
-
-// recursão do processo de partição, ordena por partes
-void Quicksort(vector <long int> & a, int p, int r) {
-  if (p < r) {
-    int q = partition(a, p, r);
-    Quicksort(a, p, q - 1);
-    Quicksort(a, q + 1, r);
-  }
-}
-
-// Imprime o vetor
-void PrintVector(vector<long int> v){
-	for(long int i=0;i<v.size();++i)
-		cout<<v[i]<<" ";
-	cout<<"\n\n";
+// Função de Ordenação com o vetore suas partições
+void Quicksort(vector<long int> &vet, long int inicio, long int fim) {
+    long int pivo;
+	
+    if (fim > inicio) {
+        pivo = particionar(vet, inicio, fim); // Definindo um pivô pela função particionar
+		
+        // Chamandas recursivas para ordenar as partições do vetor
+        Quicksort(vet, inicio, pivo-1);
+        Quicksort(vet, pivo+1, fim);
+    }
 }
 
 int main() {
 	
 	// Valores de definição
 	int start = 0;
+	clock_t start_time;
 	
 	// Geração de números aleatórios
 	std::vector<long int> randomVector = generationvector(1);
 	std::vector<long int> ascendVector = generationvector(2);
-	std::vector<long int> descendVector(100000);
+	std::vector<long int> descendVector = generationvector(3);
 	std::vector<long int> ascendDescendVector(100000);
 	std::vector<long int> descendAscendVector(100000);
 	
@@ -144,10 +126,10 @@ int main() {
 	ascendingdescendingsort(ascendDescendVector);
 	descendingascendingsort(descendAscendVector);
 	
-	clock_t start_time;
-	start_time = clock();
+
+	start_time = clock();  // Iniciando a contagem do tempo de processamento
 	Quicksort(randomVector,start,randomVector.size()-1);
-	start_time = clock() - start_time;
+	start_time = clock() - start_time; // Finalizando a contagem do tempo de processamento
 	cout<<"Tempo de executacao: "<<(start_time/CLOCKS_PER_SEC)<<endl;
 	cout<<"Ordenacao do Vetor aleatorio Concluida"<<endl;
 	
