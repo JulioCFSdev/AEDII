@@ -7,7 +7,7 @@ using namespace std;
 
 void vetorcrescente(long int array[], int n) {
     
-    for(int i = 1; i < n; i++){
+    for(long int i = 1; i < n; i++){
         array[i] = i;
     }
     
@@ -25,13 +25,13 @@ void vetorcrescentedecrescente(long int array[], int n) {
     
 	for(long int value = 0; value < n; value++)
 	{
-		if(value <= (50000))
+		if(value <= (n/2))
 		{
 			array[value] = value;
 		}
 		else
 		{
-			array[value] = 100000 - value - 1;
+			array[value] = n - value - 1;
 		}
 	}  
 }
@@ -40,7 +40,7 @@ void vetordecrescentecrescente(long int array[], int n) {
     
 	for(long int value = 0; value < n; value++)
 	{
-		if(value <= (50000))
+		if(value <= (n/2))
 		{
 			array[value] = n - value;
 		}
@@ -66,33 +66,40 @@ void vetoraleatorio(long int array[], int n) {
 
 void countSort(long int arr[], int n) {
   
-    long int arr1[100000];
-    long int count_arr[100000];
+  	// Inicializa os arrays auxiliares e o maior elemento do array
+    long int arr1[n];
+    long int count_arr[n];
     int x = arr[0];
 
+	// Determina qual é o maior valor do array
     for (int i = 1; i < n; i++) {
         if (arr[i] > x)
         x = arr[i];
     }
 
+	// Preenche o vetor de contagem dos elementos com 0
     for (int i = 0; i <= x; ++i) {
         count_arr[i] = 0;
     }
 
+	// Quantifica o número de ocorrências que o elemento terá no array
     for (int i = 0; i < n; i++) {
         count_arr[arr[i]]++;
     }
-
+	
+	// Increntando o número de occorrencia de números menores ou iguais a ele
+	// Determina qual será a maior posição que o elemento pode estar
     for (int i = 1; i <= x; i++) {
         count_arr[i] += count_arr[i - 1];
     }
 
-
+	// Determina a posição ordednada no vetor auxiliar e ordena o vetor de ocorrencias
     for (int i = n - 1; i >= 0; i--) {
         arr1[count_arr[arr[i]] - 1] = arr[i];
         count_arr[arr[i]]--;
     }
-
+	
+	// Transforma o array de entrada em uma array ordenado
     for (int i = 0; i < n; i++) {
         arr[i] = arr1[i];
     }
@@ -110,7 +117,7 @@ int main() {
 	clock_t start_time;
 	
     long int arr[100000];
-    int n = 100000;
+    long int n = 100000;
     
     
     vetorcrescente(arr, n);
